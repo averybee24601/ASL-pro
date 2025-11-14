@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Talk ASL Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="status-bar">
+        <span>10:27 PM · Thu Nov 13</span>
+        <span class="status-battery">🔋 29%</span>
+      </div>
+
+      <header class="primary-header">
+        <div class="brand-block">
+          <div class="brand-icon">🤟</div>
+          <div>
+            <h1>Talk ASL</h1>
+            <p>Communication Board</p>
+          </div>
+        </div>
+        <div class="primary-controls">
+          <button class="pill ghost">Profiles</button>
+          <button class="pill ghost">About</button>
+          <button class="pill ghost">Reorder</button>
+        </div>
+      </header>
+
+      <section class="voice-row">
+        <div class="voice-name">
+          <span id="voiceName">Ella's Voice</span>
+          <button class="icon-btn" aria-label="Edit voice name">✎</button>
+        </div>
+        <div class="chip-row">
+          <button class="chip" id="profilesBtn">Profiles</button>
+          <button class="chip" id="aboutBtn">About</button>
+          <button class="chip" id="reorderBtn">Reorder</button>
+        </div>
+      </section>
+
+      <p class="board-hint">Tap a button to speak and see the ASL sign</p>
+
+      <main class="board">
+        <section class="buttons-panel">
+          <div class="button-grid" id="buttonGrid" aria-live="polite"></div>
+          <div class="page-pager">
+            <button class="pager-dot active" aria-label="Board page 1">1</button>
+            <button class="pager-dot" aria-label="Board page 2">2</button>
+          </div>
+        </section>
+
+        <aside class="asl-panel">
+          <header>
+            <h2>ASL Sign Language</h2>
+          </header>
+          <div class="asl-card">
+            <div class="asl-image-frame">
+              <img
+                id="aslImage"
+                alt="ASL sign preview"
+                src=""
+                loading="lazy"
+              />
+            </div>
+            <div class="asl-copy">
+              <p class="asl-title" id="aslHow">How to sign: —</p>
+              <p id="aslDescription">
+                Choose any word on the left to see the matching sign.
+              </p>
+            </div>
+            <button class="read-button" id="readAloudBtn">
+              🔊 Read Aloud
+            </button>
+          </div>
+        </aside>
+
+        <div class="page-indicator">
+          <button class="indicator active">1</button>
+          <button class="indicator">2</button>
+        </div>
+      </main>
+    </div>
+
+    <div
+      class="modal-overlay hidden"
+      id="profilesModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="profilesTitle"
+    >
+      <div class="modal-card">
+        <header class="modal-header">
+          <h3 id="profilesTitle">Profiles</h3>
+          <button class="icon-btn" data-close="profilesModal" aria-label="Close">
+            ×
+          </button>
+        </header>
+
+        <div class="modal-body">
+          <div class="stack">
+            <label class="field">
+              <span>Active profile</span>
+              <select id="profileSelect"></select>
+            </label>
+            <div class="profile-actions">
+              <button id="saveProfileName" class="pill small">Save Name</button>
+              <button id="deleteProfileBtn" class="pill small danger">
+                Delete Profile
+              </button>
+            </div>
+            <label class="field">
+              <span>Edit profile name</span>
+              <input type="text" id="profileNameInput" />
+            </label>
+          </div>
+
+          <form id="createProfileForm" class="stack">
+            <h4>Create a new profile</h4>
+            <label class="field">
+              <span>Profile name</span>
+              <input
+                type="text"
+                id="newProfileInput"
+                placeholder="e.g., School"
+                required
+              />
+            </label>
+            <button type="submit" class="pill primary">Create Profile</button>
+          </form>
+
+          <section class="button-manager">
+            <header>
+              <h4>Buttons in this profile</h4>
+              <button id="addButtonToggle" class="pill outline">
+                Add Button
+              </button>
+            </header>
+            <div id="buttonManagerList" class="manager-list"></div>
+
+            <form id="buttonForm" class="stack hidden">
+              <h4 id="buttonFormTitle">Add Button</h4>
+              <label class="field">
+                <span>Word</span>
+                <input type="text" id="buttonWord" required />
+              </label>
+              <label class="field">
+                <span>How to sign (optional)</span>
+                <textarea id="buttonInstructions" rows="3"></textarea>
+              </label>
+              <div class="upload-pair">
+                <label class="field">
+                  <span>Base picture</span>
+                  <input type="file" id="buttonBaseImage" accept="image/*" />
+                  <img id="basePreview" alt="" class="preview-thumb" />
+                </label>
+                <label class="field">
+                  <span>ASL picture</span>
+                  <input type="file" id="buttonAslImage" accept="image/*" />
+                  <img id="aslPreview" alt="" class="preview-thumb" />
+                </label>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="pill primary" id="buttonSubmit">
+                  Save Button
+                </button>
+                <button type="button" class="pill ghost" id="cancelButtonEdit">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal-overlay hidden"
+      id="aboutModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="aboutTitle"
+    >
+      <div class="modal-card small">
+        <header class="modal-header">
+          <h3 id="aboutTitle">About Talk ASL</h3>
+          <button class="icon-btn" data-close="aboutModal" aria-label="Close">
+            ×
+          </button>
+        </header>
+        <div class="modal-body">
+          <p>
+            Talk ASL is a fully local communication board. Tap any tile to hear
+            the word and instantly see the ASL sign so learners can connect the
+            sound, letter, and gesture together.
+          </p>
+          <p>
+            Use profiles to build personalized boards with your own images,
+            signs, and words. Everything is saved in your browser—no account,
+            log-in, or internet connection needed.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
+
